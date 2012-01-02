@@ -207,7 +207,7 @@ namespace ExportsToC__
                 Process p = new Process();
                 p.StartInfo.FileName = _strDumpbinPath;
                 p.StartInfo.EnvironmentVariables["PATH"] += ";" + AdditionalPaths;
-                p.StartInfo.Arguments = "/EXPORTS " + file;
+                p.StartInfo.Arguments = "/EXPORTS \"" + file + "\"";
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 p.StartInfo.UseShellExecute = false;
