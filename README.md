@@ -60,4 +60,4 @@ The proxy DLL name used in the forwarding directives (e.g. `reallib` above) is e
 
 ## License
 
-GNU General Public License v3. See [COPYING](COPYING) for details.
+MIT License. See [LICENSE](LICENSE) for details.
