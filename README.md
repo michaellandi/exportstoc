@@ -6,23 +6,57 @@
 
 - Windows
 - .NET Framework 2.0
-- `dumpbin.exe` (included with Visual Studio) on your `PATH`
+- `dumpbin.exe` (included with Visual Studio) — automatically located in Visual Studio 8 or 9 install directories, or anywhere on your `PATH`
 
 ## Usage
 
-1. Open a DLL or executable in the tool (or pass it as a command-line argument)
-2. The tool runs `dumpbin.exe` and displays the exported functions
-3. Click **Generate** to produce C++ proxy code ready to use in a proxy DLL project
+1. Open a DLL in the tool via **File > Open** (or pass it as a command-line argument)
+2. The tool runs `dumpbin.exe /EXPORTS` and displays the raw export table in the top pane
+3. Click **Generate** to produce C++ proxy code in the bottom pane
+4. When prompted, enter the name of the proxy DLL (without `.dll`)
+5. Copy the output to clipboard or save it as a `.cpp` file via **File > Save**
 
-You can also launch it directly from the command line:
+You can also launch with a file pre-loaded:
 
 ```
 ExportsToC++.exe path\to\target.dll
 ```
 
-## How It Works
+## Input
 
-The tool invokes `dumpbin.exe /exports` on the target binary, parses the exported function names and ordinals, and generates C++ `#pragma comment(linker, ...)` directives and forwarding stubs — the boilerplate needed to build a drop-in proxy DLL.
+The tool accepts any Windows **DLL** (`.dll`) that exports functions. Internally it runs:
+
+```
+dumpbin.exe /EXPORTS "target.dll"
+```
+
+The raw `dumpbin` output is displayed in the top pane. The export table must contain at least one function — if the DLL has no exports the tool will warn you and skip generation.
+
+## Output
+
+The generated `.cpp` file contains:
+
+- Standard includes (`stdafx.h`, `windows.h`, `iostream`)
+- A `#pragma comment(linker, ...)` directive for each exported function, forwarding it from the proxy DLL to the real one by name and ordinal:
+
+```cpp
+#include "stdafx.h"
+#include <iostream>
+#include <windows.h>
+
+using namespace std;
+
+#pragma comment (linker, "/export:SomeFunction=reallib.SomeFunction,@1")
+#pragma comment (linker, "/export:AnotherFunction=reallib.AnotherFunction,@2")
+// ...
+
+BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason, LPVOID)
+{
+    return true;
+}
+```
+
+The proxy DLL name used in the forwarding directives (e.g. `reallib` above) is entered when you click Generate. The output can be copied to the clipboard or saved as a `.cpp` source file.
 
 ## License
 
