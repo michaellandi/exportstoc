@@ -2,7 +2,7 @@
 
 **ExportsToC++** is a Windows GUI tool that parses `dumpbin.exe` output and converts a DLL's exported function list into C++ proxy code. This is useful for creating proxy DLLs to intercept API calls.
 
-Last updated: April 13, 2026
+Last updated: April 14, 2026
 
 ## Requirements
 
