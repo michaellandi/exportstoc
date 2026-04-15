@@ -2,6 +2,23 @@
 
 **ExportsToC++** is a Windows GUI tool that parses `dumpbin.exe` output and converts a DLL's exported function list into C++ proxy code. This is useful for creating proxy DLLs to intercept API calls.
 
+> Why did the DLL go to therapy? It had too many unresolved exports.
+
+## Features
+
+- Parses any Windows DLL's export table using `dumpbin.exe /EXPORTS`
+- Generates ready-to-compile C++ proxy DLL source code in one click
+- Produces `#pragma comment(linker, ...)` forwarding directives for every exported function, preserving ordinals
+- Displays raw `dumpbin` output alongside the generated code for easy inspection
+- Copy output to clipboard or save directly as a `.cpp` file
+- Accepts a DLL path as a command-line argument for scripted or drag-and-drop workflows
+
+## How It Works
+
+A proxy DLL is a drop-in replacement for a real DLL that sits between the caller and the original library. When an application loads the proxy, it forwards every function call through to the real DLL while giving you a place to intercept, log, or modify behavior.
+
+ExportsToC++ automates the tedious part: it reads the target DLL's full export table and emits a `.cpp` file with one `#pragma comment(linker, /export:...)` directive per function. Each directive tells the linker to forward that export from your proxy DLL to the renamed original (e.g. `reallib.dll`). You compile the generated file into a new DLL, rename the original, and drop your proxy in its place. No manual export enumeration required.
+
 ## Requirements
 
 - Windows
