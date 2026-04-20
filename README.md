@@ -61,3 +61,9 @@ The proxy DLL name used in the forwarding directives (e.g. `reallib` above) is e
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+Last updated: 2026-04-20
+
+> Why do C++ developers make great comedians? Because they always know how to handle exceptions.
